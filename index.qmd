@@ -1,0 +1,7 @@
+---
+title: "Home"
+---
+
+ Hello, and thank you for coming to my website! My name's Amia Graye and click some of the tabs on the left-hand side if you want to learn more about me!
+ 
+![Amia Graye](~/Desktop/JHU Stat Computing T1/Amia Graye/amia_yellow.png)

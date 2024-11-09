@@ -1,0 +1,208 @@
+---
+title: "Example Analysis"
+bibliography: references.bib
+---
+
+**Research Question:** Does your annual income affect your odds of buying this product when controlling for gender and age?  
+
+The audience for this is pretty broad. I'm speculating that this dataset was created more for practicing data analysis rather than attaining true results, which is fine since that's what I'm using it for as well. But because of this, the audience, in my perspective, would be anyone that earns an income.  
+
+Here is a link to the data: [Social_Network_Ads.csv](https://github.com/sam16tyagi/Machine-Learning-techniques-in-python/blob/master/logistic%20regression%20dataset-Social_Network_Ads.csv)  
+[@datafile]
+
+::: {.callout-tip}
+## Tip for finding sample data
+
+Many Github users post their data on to the depositories for their projects. So if you every need some practice data to analyze, I recommend checking out some popular and even so obsecure users on Github.
+:::
+
+| Column Name     | Data Type | Description |
+|-----------------|-----------|-------------|
+| User ID         | Integer   | Unique identifier for each user. |
+| Gender          | String    | Gender of the user. |
+| Age             | Integer   | Age of the user in years. |
+| EstimatedSalary | Integer   | Estimated annual salary of the user. |
+| Purchased       | Integer   | Target variable indicating if the user purchased (1 = Yes, 0 = No). |
+
+: Data Dictionary for Social Network Ads  
+
+### Data Analysis
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+data <- read.csv("~/Desktop/JHU Stat Computing T1/Social_Network_Ads.csv")
+```
+
+- Checking if the data has any missing values or duplicates:   
+
+```{r}
+data %>%
+  summarise_all(~ sum(is.na(.))) # Check missing values
+
+data <- data %>% distinct(User.ID, .keep_all = TRUE) # Remove duplicates by User ID
+```
+
+- Add a "Gender" encoding variable column:  
+
+```{r}
+data <- data %>%
+  mutate(GenderID = ifelse(Gender == "Male", 0, 1))
+```
+
+- Graph histograms to check the distribution for "Age" and "EstimatedSalary":
+
+```{r}
+ggplot(data, aes(x = Age)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") + 
+  labs(title = "Age Distribution",
+       subtitle = "Shows the age distribution for all the subjects in the dataset",
+       caption = "Amia Graye",
+       x = "Age (in years)", 
+       y = "Frequency")
+
+ggplot(data, aes(x = EstimatedSalary)) + 
+  geom_histogram(binwidth = 10000, fill = "salmon", color = "black") + 
+  labs(tile = "Estimated Salary Distribution", 
+       subtitle = "Shows the distribution of the annual salaries for all the subjects in the dataset",
+       caption = "Amia Graye",
+       x = "Estimated Salary (in US dollars)", 
+       y = "Frequency")
+```
+
+- Create age groups for "Age":
+
+```{r}
+data <- data %>%
+  mutate(AgeGroup = cut(Age, breaks = c(-Inf, 29, 49, Inf), 
+                        labels = c("Young Adult", "Middle Adult", "Older Adult")))
+```
+
+- Create salary groups for "EstimatedSalary":
+
+```{r}
+data <- data %>%
+  mutate(SalaryGroup = cut(EstimatedSalary, 
+                           breaks = c(-Inf, 30000, 60000, 90000, Inf), 
+                           labels = c("Low", "Medium", "High", "Very High")))
+```
+
+- Find the mean and standard deviation for each group in "Age" and "Estimated Salary":
+
+```{r}
+data %>%
+  group_by(AgeGroup, SalaryGroup) %>%
+  summarise(
+    MeanAge = mean(Age, na.rm = TRUE),
+    SD_Age = sd(Age, na.rm = TRUE),
+    MeanSalary = mean(EstimatedSalary, na.rm = TRUE),
+    SD_Salary = sd(EstimatedSalary, na.rm = TRUE)
+  )
+```
+
+- Graphed a scatterplot of Age by EstimatedSalary":
+
+```{r}
+#| label: scatterplot
+#| fig-cap: "Age (in years) vs. Estimated Salary (in US dollars)"
+#| column: margin
+
+ggplot(data, aes(x = Age, y = EstimatedSalary)) + 
+  geom_point(color = "blue") +
+  labs(x = "Age", y = "Estimated Salary")
+```
+
+- Graph bar charts for the groups in "Age" and "EstimatedSalary":
+
+```{r}
+ggplot(data, aes(x = AgeGroup)) + 
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(title = "Counts of Age Groups", 
+       subtitle = "Shows graphically the counts for each of the age groups",
+       caption = "Amia Graye",
+       x = "Age Group", 
+       y = "Count")
+
+ggplot(data, aes(x = SalaryGroup)) + 
+  geom_bar(fill = "salmon", color = "black") +
+  labs(title = "Counts of Salary Groups", 
+       subtitle = "Shows graphically the counts for each of the salary groups",
+       caption = "Amia Graye",
+       x = "Salary Group", 
+       y = "Count")
+
+ggplot(data, aes(x = AgeGroup, fill = SalaryGroup)) +
+  geom_bar(position = "stack") + 
+  facet_wrap(~ Gender) + 
+  labs(title = "Age Group by Salary Group and Gender",
+       subtitle = "Shows stacked bar charts for each age group by their salary group for each gender",
+       caption = "Amia Graye",
+       x = "Age Group",
+       y = "Count")
+```
+
+- Graph boxplots for "Age" and "EstimatedSalary" by "Gender":
+
+```{r}
+ggplot(data, aes(x = as.factor(Gender), y = Age)) + 
+  geom_boxplot(fill = "lightblue") + 
+  labs(title = "Age Distribution by Gender",
+       subtitle = "Shows the age distribution for males and females in the dataset", 
+       caption = "Amia Graye",
+       x = "Gender",
+       y = "Age (in years)") + 
+  scale_x_discrete(labels = c("Male", "Female"))
+
+ggplot(data, aes(x = as.factor(Gender), y = EstimatedSalary)) + 
+  geom_boxplot(fill = "lightpink") + 
+  labs(title = "Estimated Salary Distribution by Gender",
+       subtitle = "Shows the distribution of annual salaries for males and females in the dataset", 
+       caption = "Amia Graye",
+       x = "Gender",
+       y = "Estimated Salary (in US dollars)") + 
+  scale_x_discrete(labels = c("Male", "Female"))
+```
+
+To start, I did a little bit of exploratory and visual data analysis. I first checked if there were any missing data or duplicates in the data, which there were none. I then created a separate variable encoding gender with 0 for "Male" and 1 for "Female" that would facilitate data analysis. Next, I graphed histograms for age and estimated salary to see the distributions of these data variables. I then used these distributions to create three groups for age and four groups for estimated salary. The groups for age are "Young Adult", "Middle Adult", and "Older Adult", and the groups for estimated salary are "Low", "Middle", "High", and "Very High".  Next, I found the means and standard deviations for each of the groups in age and salary.  
+
+I also created bar charts to show the counts of each group in age and estimated salary and a stacked bar chart showing the relationship between age, estimated, salary, and gender. The distribution of males and females in the age and salary groups is very comparable. Lastly, I graphed boxplots to show the difference in distribution for males and females in age and estimated salary. These boxplots show that the distributions of age and salary are very similar for males and females in this dataset.  
+
+For this dataset, I'm going to analyze it using a logistic regression. Logistic regression allows us to analyze binary outcomes with continuous or categorical predictors, while also controlling for confounders [@logistic]. In logistic regression, it is important to confound for certain variables. Confounders are variables that can affect the relationship between the true variables of interest [@confounders]. For example, if studying whether whether taking birth controlcontraceptives increases the likelihood of being diagnosed with breast cancer, age could be a confounding variable since older women are more likely to get breast cancer. And we don't want this detail to affect the relationship between birth control contraceptives and breast cancer.  
+
+In this data analysis, I confounded for age and gender. There may be some differences between spending for different age groups, as younger adults may be more tempted by things like impulse buying but older adults have more money at their disposal on average. In addition, there are different stereotypes on how men and women spend money differently, so I thought I should confound for this variable as well.  
+
+::: {.callout-note}
+## Teens admit they lie more about spending than adults
+
+According to a study by Wells Fargo, 50% of teens confessed to lying about how much they spend on things compared to 32% of adults [@wellsfargo].
+:::
+
+![From alamy.com](~/Desktop/JHU Stat Computing T1/Amia Graye/girl_steals_money.png)
+
+```{r}
+log_model <- glm(Purchased ~ EstimatedSalary + Age + GenderID, data = data, family = binomial)
+summary(log_model)
+exp(coef(log_model))
+```
+
+For this logistic regression model, estimated salary and age were both statistically significant variables, but gender was not, suggesting that estimated salary and age both have an impact on the odds of purchasing, while gender did not. In logistic regression, odds ratio is often used to analyze how much predictor can increase or decrease the odds of a certain outcome [@logistic]. Looking at the two statistically significant predictors, estimated salary has an odds ratio very close to 1 and age has an odds ratio greater than 1 (looking at the output from `exp(coef(log_model))`). This means that salary has no effect on the purchasing odds, but the odds of purchasing increases with each additional year of age, accounting for differences in salary and gender.   
+
+### List of functions used
+
+#### dplyr
+`mutate()`
+`summarise()`
+`group_by()`
+`summarise_all()`
+`distinct()`
+
+##### tidyr
+
+##### ggplot2
+`geom_histogram()`
+`geom_point()`
+`geom_bar()`
+`facet_wrap()`
+`geom_boxplot()`
+

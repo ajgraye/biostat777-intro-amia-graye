@@ -1,0 +1,26 @@
+project:
+  title: "Amia Graye"
+  type: website
+
+website:
+  title: "Amia Graye's Website"  
+  navbar:
+    left:
+      - text: "Home"     
+        href: index1.qmd  
+      - text: "About Me"
+        href: about.qmd
+      - text: "Example Analysis"
+        href: ExampleAnalysis.qmd
+      
+format:
+  html:
+    theme: minty
+    css: styles.css
+    toc: true
+    
+execute: 
+  freeze: auto
+
+editor: visual
+

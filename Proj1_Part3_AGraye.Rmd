@@ -1,0 +1,89 @@
+---
+title: "Project 1 Part 3"
+author: "Amia Graye"
+output: html_document
+date: "2024-11-06"
+---
+
+# Part 3
+
+Consider the dataset called `students.csv` with the following contents: 
+
+```
+ID,Name,Age,Gender,Grade,Subject
+1,Alice,20,F,88,Math
+2,Bob,22,M,76,History
+3,Charlie,23,M,90,Math
+4,Diana,21,F,85,Science
+5,Eve,20,F,92,Math
+6,Frank,22,M,72,History
+7,Grace,23,F,78,Science
+8,Heidi,21,F,88,Math
+9,Ivan,20,M,85,Science
+10,Judy,22,F,79,History
+```
+
+1. Use [`wget`](https://www.gnu.org/software/wget) to download the `students.csv` file locally from [here](https://github.com/stephaniehicks/jhustatprogramming2024/blob/main/projects/01-project/students.csv).
+
+``` {bash}
+wget https://raw.githubusercontent.com/stephaniehicks/jhustatprogramming2024/main/projects/01-project/students.csv
+```
+
+2. Display the contents of the `students.csv` file using the `cat` command.
+
+```{bash}
+cat students.csv
+```
+
+3. Display only the first 5 lines of the file using `head` to show the first few lines. 
+```{bash}
+head -n 5 students.csv
+```
+
+4. Display only the last 3 lines of the file using `tail` to show the last few lines.
+
+```{bash}
+tail -n 3 students.csv
+```
+
+5. Count the number of lines in the file using the `wc` command to count the lines.
+
+```{bash}
+wc -l students.csv
+```
+
+6. Find all students who are taking "Math" as a subject using `grep` to filter lines with the subject "Math".
+
+```{bash}
+grep "Math" students.csv
+```
+
+7. Find all female students using `grep` or `awk` to filter based on gender.
+
+```{bash}
+grep ",F," students.csv
+```
+
+8. Sort the file by the students' ages in ascending order. Use `sort` to order by the "Age" column.
+
+```{bash}
+sort -t, -k3,3n students.csv
+```
+
+9. Find the unique subjects listed in the file. Use `cut`, `sort`, and `uniq` to extract unique subjects.
+
+```{bash}
+cut -d, -f6 students.csv | sort | uniq
+```
+
+10. Calculate the average grade of the students. Use `awk` to sum the grades and divide by the number of students.
+
+```{bash}
+awk -F, '{sum += $5; count++} END {if (count > 0) print sum / count}' students.csv
+```
+
+11. Replace all occurrences of "Math" with "Mathematics" in the file. Use `sed` to perform the replacement.
+
+```{bash}
+sed -i '' 's/Math/Mathematics/g' students.csv
+```

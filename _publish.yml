@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: e42a49bc-4e47-4659-a9e5-f2fbb25a2223
+      url: 'https://ajgraye.quarto.pub/amia-grayes-website'

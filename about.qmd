@@ -1,0 +1,17 @@
+---
+title: "About"
+---
+
+Hello, and thank you for coming to my website! My name's Amia Graye and I'm currently a Master's student at the Bloomberg School of Public Health at Johns Hopkins University in Baltimore, MD. I went to Georgetown University for undergrad and earned a Bachelor of Arts in Mathematics.  
+
+Prior to coming to Hopkins, I was a postbaccalaurete research fellow at the National Heart, Lung, and Blood Institute (NHLBI) at the National Institutes of Health (NIH). I worked in the Office of Biostatistics Research (OBR) under the advisement of Dong-Yun Kim, PhD. During my time at NHLBI, I worked with Marcus Carlsson, MD, PhD, and Eric Morgan, MD, PhD, in their Cardiac Magnetic Resonance (CMR) lab as a statistical analyst. I still currently works there as a special volunteer, but has lowered her role to prioritize her studies.  
+
+Research Interests:  
+* Health disparities   
+* Minority health   
+* Women's health   
+* Sequential analysis  
+* Bayesian statistics   
+* Causal inference   
+
+A little bit about my person life, I'm originally born and raised in Washington, DC, and I have two great parents, an amazing sister, and an awesome nephew. Some fun facts about me: I love mac and cheese, I'm a Pisces, and I love to roller skate. 
